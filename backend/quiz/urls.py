@@ -17,6 +17,10 @@ urlpatterns = [
     path("categories/", CategoryListView.as_view(), name="categories"),
     path("categories/<int:category_id>/subcategories/", SubCategoryListView.as_view(), name="subcategories"),
     path("subcategories/<int:subcategory_id>/questions/", QuestionListView.as_view(), name="questions"),
-    path("results/", ResultCreateView.as_view(), name="results"),
+
+    # save result
+    path("result/", ResultCreateView.as_view(), name="result-create"),
+
+    # leaderboard data
     path("leaderboard/", LeaderboardView.as_view(), name="leaderboard"),
 ]

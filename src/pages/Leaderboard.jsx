@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
@@ -12,10 +12,16 @@ const Leaderboard = () => {
     const fetchLeaderboard = async () => {
       try {
         const response = await fetch("http://127.0.0.1:8000/api/leaderboard/");
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch leaderboard");
+        }
+
         const data = await response.json();
         setResults(data);
       } catch (error) {
         console.error("Error fetching leaderboard:", error);
+        setResults([]);
       } finally {
         setLoading(false);
       }
@@ -25,7 +31,7 @@ const Leaderboard = () => {
   }, []);
 
   const getRankBadge = (rank) => {
-    if (rank === 1) return "🥇";
+    if (rank === 1) return "👑";
     if (rank === 2) return "🥈";
     if (rank === 3) return "🥉";
     return "🏅";
@@ -34,6 +40,67 @@ const Leaderboard = () => {
   const getWinRate = (score, totalQuestions) => {
     if (!totalQuestions || totalQuestions === 0) return "0%";
     return `${Math.round((score / totalQuestions) * 100)}%`;
+  };
+
+  const topThree = useMemo(() => results.slice(0, 3), [results]);
+
+  const getTopCardStyle = (rank) => {
+    if (rank === 1) {
+      return {
+        background: "linear-gradient(135deg, #facc15, #f59e0b)",
+        color: "#3b2200",
+        border: "2px solid rgba(255,255,255,0.45)",
+        boxShadow: "0 18px 35px rgba(245,158,11,0.35)",
+        transform: "translateY(-10px)",
+      };
+    }
+    if (rank === 2) {
+      return {
+        background: "linear-gradient(135deg, #e5e7eb, #94a3b8)",
+        color: "#111827",
+        border: "2px solid rgba(255,255,255,0.35)",
+        boxShadow: "0 14px 30px rgba(148,163,184,0.28)",
+      };
+    }
+    return {
+      background: "linear-gradient(135deg, #fdba74, #ea580c)",
+      color: "#fff7ed",
+      border: "2px solid rgba(255,255,255,0.28)",
+      boxShadow: "0 14px 30px rgba(234,88,12,0.28)",
+    };
+  };
+
+  const getRowStyle = (rank) => {
+    if (rank === 1) {
+      return {
+        background:
+          "linear-gradient(90deg, rgba(250,204,21,0.25), rgba(245,158,11,0.15))",
+        border: "1px solid rgba(250,204,21,0.55)",
+        boxShadow: "0 10px 22px rgba(245,158,11,0.18)",
+      };
+    }
+    if (rank === 2) {
+      return {
+        background:
+          "linear-gradient(90deg, rgba(229,231,235,0.20), rgba(148,163,184,0.12))",
+        border: "1px solid rgba(203,213,225,0.38)",
+        boxShadow: "0 8px 18px rgba(148,163,184,0.14)",
+      };
+    }
+    if (rank === 3) {
+      return {
+        background:
+          "linear-gradient(90deg, rgba(251,146,60,0.20), rgba(234,88,12,0.12))",
+        border: "1px solid rgba(251,146,60,0.38)",
+        boxShadow: "0 8px 18px rgba(234,88,12,0.14)",
+      };
+    }
+    return {
+      background:
+        "linear-gradient(90deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04))",
+      border: "1px solid rgba(255,255,255,0.08)",
+      boxShadow: "0 6px 16px rgba(0,0,0,0.10)",
+    };
   };
 
   return (
@@ -78,7 +145,6 @@ const Leaderboard = () => {
               boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
             }}
           >
-            {/* Title */}
             <div style={{ textAlign: "center", marginBottom: "26px" }}>
               <div
                 style={{
@@ -132,7 +198,6 @@ const Leaderboard = () => {
               </p>
             </div>
 
-            {/* Loading / Empty / Table */}
             {loading ? (
               <div
                 style={{
@@ -161,190 +226,269 @@ const Leaderboard = () => {
                 No leaderboard data found
               </div>
             ) : (
-              <div
-                style={{
-                  borderRadius: "22px",
-                  overflowX: "auto",
-                  background: "rgba(0,0,0,0.14)",
-                  border: "1px solid rgba(255,255,255,0.10)",
-                  boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
-                }}
-              >
-                {/* Header Row */}
+              <>
+                {/* TOP 3 SPECIAL CARDS */}
                 <div
                   style={{
-                    minWidth: "980px",
                     display: "grid",
-                    gridTemplateColumns: "110px 190px 240px 130px 170px 150px 200px",
-                    alignItems: "center",
-                    gap: "10px",
-                    padding: "18px 20px",
-                    background:
-                      "linear-gradient(90deg, rgba(91,33,182,0.95), rgba(124,58,237,0.88), rgba(79,70,229,0.95))",
-                    color: "#ffffff",
-                    fontSize: "15px",
-                    fontWeight: "800",
-                    letterSpacing: "0.5px",
-                    textTransform: "uppercase",
+                    gridTemplateColumns: "repeat(3, 1fr)",
+                    gap: "18px",
+                    marginBottom: "24px",
                   }}
                 >
-                  <div>Rank</div>
-                  <div>Name</div>
-                  <div>Category</div>
-                  <div>Score</div>
-                  <div>Total Questions</div>
-                  <div>Win Rate</div>
-                  <div>Taken At</div>
-                </div>
-
-                {/* Body Rows */}
-                <div style={{ minWidth: "980px", padding: "10px 10px 12px" }}>
-                  {results.map((item, index) => {
+                  {topThree.map((item, index) => {
                     const rank = index + 1;
                     const winRate = getWinRate(item.score, item.total_questions);
+                    const specialStyle = getTopCardStyle(rank);
 
                     return (
                       <div
-                        key={item.id}
+                        key={item.id || rank}
                         style={{
-                          display: "grid",
-                          gridTemplateColumns:
-                            "110px 190px 240px 130px 170px 150px 200px",
-                          alignItems: "center",
-                          gap: "10px",
-                          padding: "14px 16px",
-                          marginBottom: "10px",
-                          borderRadius: "16px",
-                          background:
-                            rank <= 3
-                              ? "linear-gradient(90deg, rgba(126,34,206,0.38), rgba(91,33,182,0.24))"
-                              : "linear-gradient(90deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04))",
-                          border:
-                            rank <= 3
-                              ? "1px solid rgba(250,204,21,0.35)"
-                              : "1px solid rgba(255,255,255,0.08)",
-                          boxShadow:
-                            rank <= 3
-                              ? "0 8px 20px rgba(0,0,0,0.18)"
-                              : "0 6px 16px rgba(0,0,0,0.10)",
+                          borderRadius: "24px",
+                          padding: "22px 18px",
+                          textAlign: "center",
+                          ...specialStyle,
                         }}
                       >
-                        {/* Rank */}
-                        <div
-                          style={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: "10px",
-                            color: "#fff",
-                            fontWeight: "800",
-                            fontSize: "18px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              width: "48px",
-                              height: "48px",
-                              borderRadius: "14px",
-                              display: "flex",
-                              alignItems: "center",
-                              justifyContent: "center",
-                              background:
-                                rank === 1
-                                  ? "linear-gradient(135deg, #facc15, #f59e0b)"
-                                  : rank === 2
-                                  ? "linear-gradient(135deg, #e5e7eb, #94a3b8)"
-                                  : rank === 3
-                                  ? "linear-gradient(135deg, #fb923c, #ea580c)"
-                                  : "linear-gradient(135deg, #8b5cf6, #6366f1)",
-                              boxShadow: "0 8px 18px rgba(0,0,0,0.22)",
-                              fontSize: "20px",
-                            }}
-                          >
-                            {getRankBadge(rank)}
-                          </div>
-                          <span>#{rank}</span>
+                        <div style={{ fontSize: rank === 1 ? "38px" : "32px", marginBottom: "8px" }}>
+                          {getRankBadge(rank)}
                         </div>
 
-                        {/* Username */}
                         <div
                           style={{
-                            color: "#ffffff",
-                            fontSize: "17px",
-                            fontWeight: "800",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
+                            fontSize: rank === 1 ? "20px" : "18px",
+                            fontWeight: "900",
+                            marginBottom: "6px",
                           }}
                         >
-                          {item.username}
+                          #{rank} {rank === 1 ? "Champion" : rank === 2 ? "Runner Up" : "Third Place"}
                         </div>
 
-                        {/* Category */}
                         <div
                           style={{
-                            color: "rgba(255,255,255,0.92)",
-                            fontSize: "16px",
+                            fontSize: "22px",
+                            fontWeight: "900",
+                            marginBottom: "8px",
+                          }}
+                        >
+                          {item.username || "Unknown User"}
+                        </div>
+
+                        <div
+                          style={{
+                            fontSize: "15px",
                             fontWeight: "700",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
+                            marginBottom: "10px",
+                            opacity: 0.9,
                           }}
                         >
                           {item.category_name || item.subcategory_name || "Quiz Category"}
                         </div>
 
-                        {/* Score */}
                         <div
                           style={{
-                            color: "#facc15",
-                            fontSize: "18px",
-                            fontWeight: "900",
+                            display: "grid",
+                            gridTemplateColumns: "1fr 1fr",
+                            gap: "10px",
+                            marginTop: "12px",
                           }}
                         >
-                          {item.score}
-                        </div>
+                          <div
+                            style={{
+                              background: "rgba(255,255,255,0.22)",
+                              borderRadius: "14px",
+                              padding: "10px",
+                            }}
+                          >
+                            <div style={{ fontSize: "12px", fontWeight: "800" }}>SCORE</div>
+                            <div style={{ fontSize: "20px", fontWeight: "900" }}>{item.score}</div>
+                          </div>
 
-                        {/* Total Questions */}
-                        <div
-                          style={{
-                            color: "#ffffff",
-                            fontSize: "16px",
-                            fontWeight: "700",
-                          }}
-                        >
-                          {item.total_questions}
-                        </div>
-
-                        {/* Win rate */}
-                        <div
-                          style={{
-                            color: "#86efac",
-                            fontSize: "16px",
-                            fontWeight: "800",
-                          }}
-                        >
-                          {winRate}
-                        </div>
-
-                        {/* Taken At */}
-                        <div
-                          style={{
-                            color: "rgba(255,255,255,0.85)",
-                            fontSize: "14px",
-                            fontWeight: "600",
-                            lineHeight: "1.5",
-                          }}
-                        >
-                          {new Date(item.taken_at).toLocaleString()}
+                          <div
+                            style={{
+                              background: "rgba(255,255,255,0.22)",
+                              borderRadius: "14px",
+                              padding: "10px",
+                            }}
+                          >
+                            <div style={{ fontSize: "12px", fontWeight: "800" }}>WIN RATE</div>
+                            <div style={{ fontSize: "20px", fontWeight: "900" }}>{winRate}</div>
+                          </div>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </div>
+
+                {/* TABLE */}
+                <div
+                  style={{
+                    borderRadius: "22px",
+                    overflowX: "auto",
+                    background: "rgba(0,0,0,0.14)",
+                    border: "1px solid rgba(255,255,255,0.10)",
+                    boxShadow: "inset 0 1px 0 rgba(255,255,255,0.05)",
+                  }}
+                >
+                  <div
+                    style={{
+                      minWidth: "980px",
+                      display: "grid",
+                      gridTemplateColumns: "110px 190px 240px 130px 170px 150px 200px",
+                      alignItems: "center",
+                      gap: "10px",
+                      padding: "18px 20px",
+                      background:
+                        "linear-gradient(90deg, rgba(91,33,182,0.95), rgba(124,58,237,0.88), rgba(79,70,229,0.95))",
+                      color: "#ffffff",
+                      fontSize: "15px",
+                      fontWeight: "800",
+                      letterSpacing: "0.5px",
+                      textTransform: "uppercase",
+                    }}
+                  >
+                    <div>Rank</div>
+                    <div>Name</div>
+                    <div>Category</div>
+                    <div>Score</div>
+                    <div>Total Questions</div>
+                    <div>Win Rate</div>
+                    <div>Taken At</div>
+                  </div>
+
+                  <div style={{ minWidth: "980px", padding: "10px 10px 12px" }}>
+                    {results.map((item, index) => {
+                      const rank = index + 1;
+                      const winRate = getWinRate(item.score, item.total_questions);
+                      const rowStyle = getRowStyle(rank);
+
+                      return (
+                        <div
+                          key={item.id || index}
+                          style={{
+                            display: "grid",
+                            gridTemplateColumns:
+                              "110px 190px 240px 130px 170px 150px 200px",
+                            alignItems: "center",
+                            gap: "10px",
+                            padding: "14px 16px",
+                            marginBottom: "10px",
+                            borderRadius: "16px",
+                            ...rowStyle,
+                          }}
+                        >
+                          <div
+                            style={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: "10px",
+                              color: "#fff",
+                              fontWeight: "800",
+                              fontSize: "18px",
+                            }}
+                          >
+                            <div
+                              style={{
+                                width: "52px",
+                                height: "52px",
+                                borderRadius: "16px",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center",
+                                background:
+                                  rank === 1
+                                    ? "linear-gradient(135deg, #facc15, #f59e0b)"
+                                    : rank === 2
+                                    ? "linear-gradient(135deg, #e5e7eb, #94a3b8)"
+                                    : rank === 3
+                                    ? "linear-gradient(135deg, #fb923c, #ea580c)"
+                                    : "linear-gradient(135deg, #8b5cf6, #6366f1)",
+                                boxShadow: "0 8px 18px rgba(0,0,0,0.22)",
+                                fontSize: rank === 1 ? "22px" : "20px",
+                              }}
+                            >
+                              {getRankBadge(rank)}
+                            </div>
+                            <span style={{ color: "#fff" }}>#{rank}</span>
+                          </div>
+
+                          <div
+                            style={{
+                              color: "#ffffff",
+                              fontSize: rank <= 3 ? "18px" : "17px",
+                              fontWeight: "800",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {item.username || "Unknown User"}
+                          </div>
+
+                          <div
+                            style={{
+                              color: "rgba(255,255,255,0.92)",
+                              fontSize: "16px",
+                              fontWeight: "700",
+                              overflow: "hidden",
+                              textOverflow: "ellipsis",
+                              whiteSpace: "nowrap",
+                            }}
+                          >
+                            {item.category_name || item.subcategory_name || "Quiz Category"}
+                          </div>
+
+                          <div
+                            style={{
+                              color: rank === 1 ? "#fde047" : "#facc15",
+                              fontSize: "18px",
+                              fontWeight: "900",
+                            }}
+                          >
+                            {item.score}
+                          </div>
+
+                          <div
+                            style={{
+                              color: "#ffffff",
+                              fontSize: "16px",
+                              fontWeight: "700",
+                            }}
+                          >
+                            {item.total_questions}
+                          </div>
+
+                          <div
+                            style={{
+                              color: "#86efac",
+                              fontSize: "16px",
+                              fontWeight: "800",
+                            }}
+                          >
+                            {winRate}
+                          </div>
+
+                          <div
+                            style={{
+                              color: "rgba(255,255,255,0.85)",
+                              fontSize: "14px",
+                              fontWeight: "600",
+                              lineHeight: "1.5",
+                            }}
+                          >
+                            {item.taken_at
+                              ? new Date(item.taken_at).toLocaleString()
+                              : "N/A"}
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </>
             )}
 
-            {/* Bottom Button */}
             <div style={{ textAlign: "center", marginTop: "26px" }}>
               <button
                 onClick={() => navigate("/dashboard")}

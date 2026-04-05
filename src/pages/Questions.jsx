@@ -123,25 +123,77 @@ function Questions() {
     setIsAnswered(false);
   }, [currentQuestion, quizQuestions.length]);
 
-  const finishCurrentSubcategory = (updatedScore, updatedReviewAnswers) => {
+  const saveQuizResult = async (finalScore, finalTotal) => {
+    try {
+      const user = JSON.parse(localStorage.getItem("user")) || {};
+      const userId = user?.id || user?.user_id;
+
+      if (!userId) {
+        console.log("User ID not found");
+        return false;
+      }
+
+      if (!subcategoryId) {
+        console.log("Subcategory ID not found");
+        return false;
+      }
+
+      const response = await fetch("http://127.0.0.1:8000/api/result/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user: userId,
+          subcategory: subcategoryId,
+          score: finalScore,
+          total_questions: finalTotal,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        console.error("Result save failed:", data);
+        return false;
+      }
+
+      console.log("Result saved successfully:", data);
+      return true;
+    } catch (error) {
+      console.error("Error saving result:", error);
+      return false;
+    }
+  };
+
+  const finishCurrentSubcategory = async (updatedScore, updatedReviewAnswers) => {
     const taggedAnswers = updatedReviewAnswers.map((item) => ({
       ...item,
       subcategory,
     }));
 
-    setAllReviewAnswers((prev) => [...prev, ...taggedAnswers]);
-    setTotalScore((prev) => prev + updatedScore);
-    setTotalQuestionsCount((prev) => prev + quizQuestions.length);
+    const newAllReviewAnswers = [...allReviewAnswers, ...taggedAnswers];
+    const newTotalScore = totalScore + updatedScore;
+    const newTotalQuestions = totalQuestionsCount + quizQuestions.length;
+
+    setAllReviewAnswers(newAllReviewAnswers);
+    setTotalScore(newTotalScore);
+    setTotalQuestionsCount(newTotalQuestions);
+
+    await saveQuizResult(updatedScore, quizQuestions.length);
 
     if (currentSubIndex < allSubcategories.length - 1) {
       setShowNextScreen(true);
     } else {
       navigate("/result", {
         state: {
-          score: totalScore + updatedScore,
-          total: totalQuestionsCount + quizQuestions.length,
+          score: newTotalScore,
+          total: newTotalQuestions,
+          totalQuestions: newTotalQuestions,
           category,
-          reviewAnswers: [...allReviewAnswers, ...taggedAnswers],
+          subcategory,
+          subcategoryId,
+          reviewAnswers: newAllReviewAnswers,
         },
       });
     }
@@ -270,13 +322,7 @@ function Questions() {
             padding: "20px",
           }}
         >
-          <div
-            style={{
-              color: "#fff",
-              fontSize: "32px",
-              fontWeight: "800",
-            }}
-          >
+          <div style={{ color: "#fff", fontSize: "32px", fontWeight: "800" }}>
             Loading Questions...
           </div>
         </div>
@@ -344,14 +390,7 @@ function Questions() {
               boxShadow: "0 20px 45px rgba(0,0,0,0.35)",
             }}
           >
-            <div
-              style={{
-                fontSize: "60px",
-                marginBottom: "18px",
-              }}
-            >
-              ✅
-            </div>
+            <div style={{ fontSize: "60px", marginBottom: "18px" }}>✅</div>
 
             <h1
               style={{

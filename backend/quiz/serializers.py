@@ -40,6 +40,7 @@ class QuestionSerializer(serializers.ModelSerializer):
 class ResultSerializer(serializers.ModelSerializer):
     username = serializers.CharField(source="user.username", read_only=True)
     subcategory_name = serializers.CharField(source="subcategory.name", read_only=True)
+    category_name = serializers.CharField(source="subcategory.category.name", read_only=True)
 
     class Meta:
         model = Result
@@ -52,4 +53,5 @@ class ResultSerializer(serializers.ModelSerializer):
             "taken_at",
             "username",
             "subcategory_name",
+            "category_name",
         ]

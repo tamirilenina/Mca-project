@@ -12,7 +12,7 @@ function Instructions() {
   const subcategory = location.state?.subcategory || "World Geography";
   const subcategoryId = location.state?.subcategoryId || null;
 
-  // very important for next subcategory flow
+  // next subcategory flow kosam
   const subcategories = location.state?.subcategories || [];
   const startIndex = location.state?.startIndex || 0;
 
@@ -24,11 +24,14 @@ function Instructions() {
   useEffect(() => {
     const fetchQuestionsCount = async () => {
       if (!subcategoryId) {
+        setTotalQuestions(0);
         setLoading(false);
         return;
       }
 
       try {
+        setLoading(true);
+
         const response = await fetch(
           `http://127.0.0.1:8000/api/subcategories/${subcategoryId}/questions/`
         );
@@ -38,7 +41,7 @@ function Instructions() {
         }
 
         const data = await response.json();
-        setTotalQuestions(data.length);
+        setTotalQuestions(Array.isArray(data) ? data.length : 0);
       } catch (error) {
         console.error("Error fetching questions count:", error);
         setTotalQuestions(0);
@@ -62,6 +65,16 @@ function Instructions() {
   };
 
   const handleStartQuiz = () => {
+    if (!subcategoryId) {
+      alert("Subcategory ID not found. Please select subcategory again.");
+      return;
+    }
+
+    if (totalQuestions === 0) {
+      alert("No questions found for this subcategory.");
+      return;
+    }
+
     navigate("/questions", {
       state: {
         category,

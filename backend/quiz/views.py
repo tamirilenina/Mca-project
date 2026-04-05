@@ -77,4 +77,4 @@ class ResultCreateView(generics.CreateAPIView):
 
 class LeaderboardView(generics.ListAPIView):
     serializer_class = ResultSerializer
-    queryset = Result.objects.all().order_by("-score", "taken_at")
+    queryset = Result.objects.all().order_by("-score", "-taken_at")
