@@ -278,32 +278,30 @@ function Questions() {
   };
 
   const getOptionStyle = (option) => {
-    let background = "linear-gradient(180deg, #163d9a 0%, #0e2f7f 100%)";
-    let border = "2px solid #d4a017";
-    let color = "#ffffff";
-    let boxShadow =
-      "0 6px 18px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.18)";
+    let background = "#ffffff";
+    let border = "2px solid #cbd5e1";
+    let color = "#1e293b";
 
     if (isAnswered) {
       if (option === current.answer) {
-        background = "linear-gradient(180deg, #16a34a 0%, #15803d 100%)";
-        border = "2px solid #facc15";
+        background = "#dcfce7";
+        border = "2px solid #16a34a";
+        color = "#166534";
       } else if (option === selectedOption && option !== current.answer) {
-        background = "linear-gradient(180deg, #dc2626 0%, #b91c1c 100%)";
-        border = "2px solid #facc15";
-      } else {
-        background = "linear-gradient(180deg, #163d9a 0%, #0e2f7f 100%)";
+        background = "#fee2e2";
+        border = "2px solid #dc2626";
+        color = "#991b1b";
       }
     } else if (selectedOption === option) {
-      background = "linear-gradient(180deg, #f59e0b 0%, #d97706 100%)";
-      border = "2px solid #facc15";
+      background = "#dbeafe";
+      border = "2px solid #2563eb";
+      color = "#1d4ed8";
     }
 
     return {
       background,
       border,
       color,
-      boxShadow,
     };
   };
 
@@ -313,7 +311,7 @@ function Questions() {
         <div
           style={{
             minHeight: "100vh",
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${bgImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             display: "flex",
@@ -322,7 +320,13 @@ function Questions() {
             padding: "20px",
           }}
         >
-          <div style={{ color: "#fff", fontSize: "32px", fontWeight: "800" }}>
+          <div
+            style={{
+              color: "#ffffff",
+              fontSize: "30px",
+              fontWeight: "800",
+            }}
+          >
             Loading Questions...
           </div>
         </div>
@@ -336,7 +340,7 @@ function Questions() {
         <div
           style={{
             minHeight: "100vh",
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${bgImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             display: "flex",
@@ -347,8 +351,8 @@ function Questions() {
         >
           <div
             style={{
-              color: "#fff",
-              fontSize: "28px",
+              color: "#ffffff",
+              fontSize: "26px",
               fontWeight: "700",
               textAlign: "center",
             }}
@@ -366,10 +370,9 @@ function Questions() {
         <div
           style={{
             minHeight: "100vh",
-            backgroundImage: `linear-gradient(rgba(4,10,40,0.72), rgba(4,10,40,0.72)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${bgImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
@@ -379,25 +382,21 @@ function Questions() {
           <div
             style={{
               width: "100%",
-              maxWidth: "760px",
-              background: "rgba(255,255,255,0.10)",
-              border: "1px solid rgba(255,255,255,0.18)",
-              backdropFilter: "blur(12px)",
-              WebkitBackdropFilter: "blur(12px)",
-              borderRadius: "28px",
-              padding: "50px 30px",
+              maxWidth: "700px",
+              background: "rgba(255,255,255,0.12)",
+              borderRadius: "20px",
+              padding: "40px 30px",
               textAlign: "center",
-              boxShadow: "0 20px 45px rgba(0,0,0,0.35)",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.18)",
             }}
           >
-            <div style={{ fontSize: "60px", marginBottom: "18px" }}>✅</div>
-
             <h1
               style={{
-                color: "#fff",
-                fontSize: "38px",
+                color: "#ffffff",
+                fontSize: "36px",
                 fontWeight: "900",
-                marginBottom: "14px",
+                marginBottom: "15px",
               }}
             >
               {subcategory} Completed!
@@ -405,34 +404,38 @@ function Questions() {
 
             <p
               style={{
-                color: "#e2e8f0",
+                color: "#f8fafc",
                 fontSize: "22px",
-                fontWeight: "600",
                 marginBottom: "10px",
+                fontWeight: "600",
               }}
             >
               This Subcategory Score:{" "}
-              <span style={{ color: "#facc15" }}>{score}</span>
+              <span style={{ color: "#facc15", fontWeight: "800" }}>
+                {score}
+              </span>
+            </p>
+
+            <p
+              style={{
+                color: "#f8fafc",
+                fontSize: "20px",
+                marginBottom: "10px",
+                fontWeight: "600",
+              }}
+            >
+              Total Score So Far:{" "}
+              <span style={{ color: "#facc15", fontWeight: "800" }}>
+                {totalScore + score}
+              </span>
             </p>
 
             <p
               style={{
                 color: "#e2e8f0",
-                fontSize: "20px",
+                fontSize: "18px",
+                marginBottom: "28px",
                 fontWeight: "600",
-                marginBottom: "10px",
-              }}
-            >
-              Total Score So Far:{" "}
-              <span style={{ color: "#facc15" }}>{totalScore + score}</span>
-            </p>
-
-            <p
-              style={{
-                color: "#cbd5e1",
-                fontSize: "20px",
-                fontWeight: "600",
-                marginBottom: "34px",
               }}
             >
               Next Subcategory:{" "}
@@ -444,18 +447,17 @@ function Questions() {
             <button
               onClick={handleNextSubcategory}
               style={{
-                padding: "16px 34px",
-                fontSize: "20px",
+                padding: "14px 28px",
+                fontSize: "18px",
                 fontWeight: "800",
-                borderRadius: "14px",
+                borderRadius: "10px",
                 border: "none",
-                background: "linear-gradient(90deg, #22c55e, #16a34a)",
-                color: "#fff",
+                background: "#16a34a",
+                color: "#ffffff",
                 cursor: "pointer",
-                boxShadow: "0 12px 28px rgba(34,197,94,0.35)",
               }}
             >
-              Next Subcategory →
+              Next Subcategory
             </button>
           </div>
         </div>
@@ -469,7 +471,7 @@ function Questions() {
         <div
           style={{
             minHeight: "100vh",
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${bgImage})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)), url(${bgImage})`,
             backgroundSize: "cover",
             backgroundPosition: "center",
             display: "flex",
@@ -480,7 +482,7 @@ function Questions() {
         >
           <div
             style={{
-              color: "#fff",
+              color: "#ffffff",
               fontSize: "28px",
               fontWeight: "700",
               textAlign: "center",
@@ -501,235 +503,205 @@ function Questions() {
       <div
         style={{
           minHeight: "100vh",
-          backgroundImage: `linear-gradient(rgba(4,10,40,0.55), rgba(4,10,40,0.55)), url(${bgImage})`,
+          backgroundImage: `linear-gradient(rgba(0,0,0,0.60), rgba(0,0,0,0.60)), url(${bgImage})`,
           backgroundSize: "cover",
           backgroundPosition: "center",
           backgroundRepeat: "no-repeat",
-          position: "relative",
-          overflow: "hidden",
           padding: "30px 20px",
         }}
       >
         <div
           style={{
-            maxWidth: "1100px",
+            maxWidth: "900px",
             margin: "0 auto",
-            position: "relative",
-            zIndex: 2,
           }}
         >
           <div
             style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              gap: "20px",
-              flexWrap: "wrap",
-              marginBottom: "18px",
+              background: "rgba(255,255,255,0.12)",
+              borderRadius: "20px",
+              padding: "25px",
+              backdropFilter: "blur(10px)",
+              border: "1px solid rgba(255,255,255,0.18)",
             }}
           >
             <div
               style={{
-                color: "#f8fafc",
-                fontSize: "22px",
-                fontWeight: "700",
-                textShadow: "0 2px 8px rgba(0,0,0,0.5)",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                flexWrap: "wrap",
+                gap: "15px",
+                marginBottom: "20px",
               }}
             >
-              {category} → {subcategory}
-            </div>
-
-            <div
-              style={{
-                minWidth: "130px",
-                textAlign: "center",
-                padding: "14px 22px",
-                borderRadius: "18px",
-                color: "#fff",
-                fontWeight: "800",
-                fontSize: "30px",
-                background:
-                  timeLeft <= 10
-                    ? "linear-gradient(180deg, #dc2626 0%, #991b1b 100%)"
-                    : "linear-gradient(180deg, #2563eb 0%, #1d4ed8 100%)",
-                border: "2px solid #d4a017",
-                boxShadow: "0 10px 24px rgba(0,0,0,0.35)",
-              }}
-            >
-              ⏱ {timeLeft}s
-            </div>
-          </div>
-
-          <div
-            style={{
-              color: "#ffffff",
-              fontSize: "18px",
-              fontWeight: "700",
-              marginBottom: "10px",
-            }}
-          >
-            Subcategory {currentSubIndex + 1} of {allSubcategories.length || 1}
-          </div>
-
-          <div
-            style={{
-              color: "#ffffff",
-              fontSize: "34px",
-              fontWeight: "800",
-              marginBottom: "8px",
-              textShadow: "0 2px 8px rgba(0,0,0,0.5)",
-            }}
-          >
-            Question {currentQuestion + 1} of {quizQuestions.length}
-          </div>
-
-          <div
-            style={{
-              color: "#e2e8f0",
-              fontSize: "20px",
-              fontWeight: "600",
-              marginBottom: "14px",
-            }}
-          >
-            Progress: {currentQuestion + 1}/{quizQuestions.length}
-          </div>
-
-          <div
-            style={{
-              width: "100%",
-              height: "14px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.25)",
-              overflow: "hidden",
-              marginBottom: "12px",
-            }}
-          >
-            <div
-              style={{
-                width: `${progressPercent}%`,
-                height: "100%",
-                background: "linear-gradient(90deg, #7c3aed, #2563eb)",
-                transition: "width 0.4s ease",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              width: "100%",
-              height: "12px",
-              borderRadius: "999px",
-              background: "rgba(255,255,255,0.25)",
-              overflow: "hidden",
-              marginBottom: "34px",
-            }}
-          >
-            <div
-              style={{
-                width: `${timerPercent}%`,
-                height: "100%",
-                background:
-                  timeLeft <= 10
-                    ? "linear-gradient(90deg, #ef4444, #dc2626)"
-                    : "linear-gradient(90deg, #22c55e, #16a34a)",
-                transition: "width 1s linear",
-              }}
-            />
-          </div>
-
-          <div
-            style={{
-              maxWidth: "920px",
-              margin: "0 auto 26px auto",
-              background: "linear-gradient(180deg, #163d9a 0%, #0e2f7f 100%)",
-              border: "3px solid #d4a017",
-              color: "#fff",
-              padding: "18px 34px",
-              borderRadius: "999px",
-              textAlign: "center",
-              fontSize: "28px",
-              fontWeight: "800",
-              boxShadow:
-                "0 10px 30px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.18)",
-              position: "relative",
-            }}
-          >
-            {current.question}
-          </div>
-
-          <div
-            style={{
-              maxWidth: "1050px",
-              margin: "0 auto",
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "18px 26px",
-            }}
-          >
-            {current.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleAnswer(option)}
-                disabled={isAnswered}
+              <div
                 style={{
-                  ...getOptionStyle(option),
-                  padding: "16px 24px",
-                  borderRadius: "999px",
-                  fontSize: "22px",
-                  fontWeight: "800",
-                  cursor: isAnswered ? "not-allowed" : "pointer",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                  gap: "12px",
-                  minHeight: "74px",
+                  color: "#ffffff",
+                  fontSize: "20px",
+                  fontWeight: "700",
                 }}
               >
-                <span
+                {category} → {subcategory}
+              </div>
+
+              <div
+                style={{
+                  background: timeLeft <= 10 ? "#dc2626" : "#2563eb",
+                  color: "#ffffff",
+                  padding: "10px 18px",
+                  borderRadius: "10px",
+                  fontWeight: "800",
+                  fontSize: "22px",
+                }}
+              >
+                ⏱ {timeLeft}s
+              </div>
+            </div>
+
+            <div
+              style={{
+                color: "#ffffff",
+                fontSize: "18px",
+                fontWeight: "700",
+                marginBottom: "8px",
+              }}
+            >
+              Question {currentQuestion + 1} of {quizQuestions.length}
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                height: "10px",
+                borderRadius: "10px",
+                background: "rgba(255,255,255,0.20)",
+                overflow: "hidden",
+                marginBottom: "10px",
+              }}
+            >
+              <div
+                style={{
+                  width: `${progressPercent}%`,
+                  height: "100%",
+                  background: "#8b5cf6",
+                  transition: "width 0.4s ease",
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                width: "100%",
+                height: "8px",
+                borderRadius: "10px",
+                background: "rgba(255,255,255,0.20)",
+                overflow: "hidden",
+                marginBottom: "25px",
+              }}
+            >
+              <div
+                style={{
+                  width: `${timerPercent}%`,
+                  height: "100%",
+                  background: timeLeft <= 10 ? "#ef4444" : "#22c55e",
+                  transition: "width 1s linear",
+                }}
+              />
+            </div>
+
+            <div
+              style={{
+                background: "#ffffff",
+                color: "#0f172a",
+                borderRadius: "16px",
+                padding: "22px",
+                fontSize: "28px",
+                fontWeight: "800",
+                textAlign: "center",
+                marginBottom: "25px",
+                boxShadow: "0 8px 20px rgba(0,0,0,0.20)",
+              }}
+            >
+              {current.question}
+            </div>
+
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr",
+                gap: "15px",
+              }}
+            >
+              {current.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleAnswer(option)}
+                  disabled={isAnswered}
                   style={{
-                    color: "#facc15",
-                    fontWeight: "900",
-                    minWidth: "42px",
+                    ...getOptionStyle(option),
+                    padding: "16px 18px",
+                    borderRadius: "12px",
+                    fontSize: "18px",
+                    fontWeight: "700",
+                    cursor: isAnswered ? "not-allowed" : "pointer",
                     textAlign: "left",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "12px",
+                    transition: "0.3s ease",
                   }}
                 >
-                  {String.fromCharCode(65 + index)}:
-                </span>
-                <span>{option}</span>
-              </button>
-            ))}
-          </div>
+                  <span
+                    style={{
+                      minWidth: "32px",
+                      height: "32px",
+                      borderRadius: "50%",
+                      background: "#1e293b",
+                      color: "#ffffff",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      fontWeight: "800",
+                      fontSize: "14px",
+                    }}
+                  >
+                    {String.fromCharCode(65 + index)}
+                  </span>
+                  <span>{option}</span>
+                </button>
+              ))}
+            </div>
 
-          {isAnswered && (
-            <p
+            {isAnswered && (
+              <p
+                style={{
+                  marginTop: "22px",
+                  textAlign: "center",
+                  fontSize: "20px",
+                  fontWeight: "800",
+                  color: selectedOption === current.answer ? "#22c55e" : "#ef4444",
+                }}
+              >
+                {selectedOption
+                  ? selectedOption === current.answer
+                    ? "Correct Answer ✅"
+                    : "Wrong Answer ❌"
+                  : "Time Up ⏰ Moving to next question..."}
+              </p>
+            )}
+
+            <div
               style={{
-                marginTop: "24px",
+                marginTop: "20px",
                 textAlign: "center",
                 fontSize: "22px",
                 fontWeight: "800",
-                color: selectedOption === current.answer ? "#22c55e" : "#ef4444",
-                textShadow: "0 2px 8px rgba(0,0,0,0.45)",
+                color: "#ffffff",
               }}
             >
-              {selectedOption
-                ? selectedOption === current.answer
-                  ? "Correct Answer ✅"
-                  : "Wrong Answer ❌"
-                : "Time Up ⏰ Moving to next question..."}
-            </p>
-          )}
-
-          <div
-            style={{
-              marginTop: "22px",
-              textAlign: "center",
-              fontSize: "22px",
-              fontWeight: "800",
-              color: "#ffffff",
-              textShadow: "0 2px 8px rgba(0,0,0,0.45)",
-            }}
-          >
-            Current Score: <span style={{ color: "#facc15" }}>{score}</span>
+              Current Score: <span style={{ color: "#facc15" }}>{score}</span>
+            </div>
           </div>
         </div>
       </div>

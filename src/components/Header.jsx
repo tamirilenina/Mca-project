@@ -1,39 +1,51 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 
 const Header = () => {
   const navigate = useNavigate();
 
-  // 🔥 localStorage nundi data theeskuntam
   const storedUser = localStorage.getItem("user");
   const isLoggedIn = localStorage.getItem("isLoggedIn") === "true";
   const user = storedUser ? JSON.parse(storedUser) : null;
 
-  // 🔥 Logout function
   const handleLogout = () => {
     localStorage.removeItem("user");
     localStorage.removeItem("isLoggedIn");
     navigate("/login");
   };
 
-  const linkStyle = {
-    color: "#ffffff",
+  const navLinkStyle = ({ isActive }) => ({
+    color: isActive ? "#ecfeff" : "rgba(255,255,255,0.88)",
     textDecoration: "none",
-    fontSize: "16px",
-    fontWeight: "600",
-    padding: "10px 14px",
-    borderRadius: "12px",
-    transition: "all 0.3s ease",
-  };
-
-  const buttonBase = {
-    border: "none",
-    padding: "10px 16px",
-    borderRadius: "12px",
-    cursor: "pointer",
     fontSize: "15px",
     fontWeight: "700",
-    transition: "all 0.3s ease",
+    padding: "11px 17px",
+    borderRadius: "14px",
+    letterSpacing: "0.3px",
+    background: isActive
+      ? "linear-gradient(135deg, rgba(16,185,129,0.22), rgba(6,182,212,0.18))"
+      : "transparent",
+    border: isActive
+      ? "1px solid rgba(125,211,252,0.22)"
+      : "1px solid transparent",
+    boxShadow: isActive
+      ? "inset 0 1px 0 rgba(255,255,255,0.10), 0 8px 18px rgba(0,0,0,0.18)"
+      : "none",
+    transition: "all 0.35s ease",
+    display: "inline-flex",
+    alignItems: "center",
+    justifyContent: "center",
+  });
+
+  const actionButton = {
+    border: "none",
+    outline: "none",
+    cursor: "pointer",
+    fontSize: "15px",
+    fontWeight: "800",
+    borderRadius: "14px",
+    padding: "11px 18px",
+    transition: "all 0.35s ease",
   };
 
   return (
@@ -42,28 +54,48 @@ const Header = () => {
         position: "sticky",
         top: 0,
         zIndex: 1000,
+        padding: "16px 24px",
         background:
-          "linear-gradient(135deg, rgba(76,29,149,0.95), rgba(37,99,235,0.95), rgba(124,58,237,0.95))",
-        backdropFilter: "blur(14px)",
-        WebkitBackdropFilter: "blur(14px)",
-        borderBottom: "1px solid rgba(255,255,255,0.15)",
+          "linear-gradient(180deg, rgba(3,8,20,0.92), rgba(3,10,18,0.72))",
+        backdropFilter: "blur(16px)",
+        WebkitBackdropFilter: "blur(16px)",
+        borderBottom: "1px solid rgba(255,255,255,0.06)",
         boxShadow:
-          "0 10px 30px rgba(0,0,0,0.25), inset 0 1px 0 rgba(255,255,255,0.18)",
-        padding: "14px 28px",
+          "0 10px 30px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.04)",
       }}
     >
       <div
         style={{
-          maxWidth: "1250px",
+          maxWidth: "1320px",
           margin: "0 auto",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
-          gap: "20px",
+          gap: "22px",
           flexWrap: "wrap",
+          padding: "12px 18px",
+          borderRadius: "24px",
+          background:
+            "linear-gradient(135deg, rgba(7,15,25,0.88), rgba(10,25,35,0.84), rgba(7,40,48,0.72))",
+          border: "1px solid rgba(52,211,153,0.12)",
+          boxShadow:
+            "0 16px 40px rgba(0,0,0,0.34), inset 0 1px 0 rgba(255,255,255,0.06), inset 0 -1px 0 rgba(255,255,255,0.03)",
+          position: "relative",
+          overflow: "hidden",
         }}
       >
-        {/* Logo */}
+        {/* Glow Effect */}
+        <div
+          style={{
+            position: "absolute",
+            inset: 0,
+            background:
+              "radial-gradient(circle at top left, rgba(16,185,129,0.16), transparent 28%), radial-gradient(circle at top right, rgba(6,182,212,0.14), transparent 30%)",
+            pointerEvents: "none",
+          }}
+        />
+
+        {/* LOGO */}
         <div
           onClick={() => navigate("/")}
           style={{
@@ -71,124 +103,122 @@ const Header = () => {
             alignItems: "center",
             gap: "14px",
             cursor: "pointer",
+            zIndex: 2,
           }}
         >
+          {/* Icon */}
           <div
             style={{
-              width: "52px",
-              height: "52px",
-              borderRadius: "16px",
+              width: "60px",
+              height: "60px",
+              borderRadius: "20px",
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
               background:
-                "linear-gradient(135deg, #f472b6, #facc15, #60a5fa, #8b5cf6)",
+                "linear-gradient(135deg, #34d399 0%, #22c55e 35%, #06b6d4 100%)",
               boxShadow:
-                "0 8px 20px rgba(0,0,0,0.28), inset 0 2px 6px rgba(255,255,255,0.35)",
-              transform: "perspective(120px) rotateX(8deg)",
+                "0 10px 24px rgba(6,182,212,0.22), inset 0 2px 8px rgba(255,255,255,0.22), 0 0 18px rgba(16,185,129,0.20)",
+              transform: "perspective(220px) rotateX(10deg) rotateY(-8deg)",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
+            <div
+              style={{
+                position: "absolute",
+                top: "-10%",
+                left: "-35%",
+                width: "80%",
+                height: "80%",
+                background: "rgba(255,255,255,0.24)",
+                filter: "blur(10px)",
+                transform: "rotate(26deg)",
+              }}
+            />
             <span
               style={{
-                fontSize: "24px",
-                filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.25))",
+                fontSize: "28px",
+                zIndex: 2,
               }}
             >
-              🧠
+              📊
             </span>
           </div>
 
+          {/* TEXT */}
           <div>
-            <h2
+            <h1
               style={{
                 margin: 0,
-                fontSize: "32px",
+                fontSize: "34px",
                 fontWeight: "900",
-                lineHeight: "1",
-                letterSpacing: "0.5px",
-                background: "linear-gradient(90deg, #ffffff, #e0e7ff, #ffffff)",
+                background:
+                  "linear-gradient(90deg, #ffffff 0%, #d1fae5 45%, #cffafe 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                textShadow: "0 4px 14px rgba(255,255,255,0.18)",
               }}
             >
-              Quiz App
-            </h2>
+              KnowledgeHub
+            </h1>
+
             <p
               style={{
-                margin: "4px 0 0 0",
+                margin: "5px 0 0 2px",
                 fontSize: "12px",
-                color: "rgba(255,255,255,0.78)",
-                letterSpacing: "1.2px",
+                fontWeight: "800",
+                color: "rgba(220,252,231,0.76)",
+                letterSpacing: "2px",
                 textTransform: "uppercase",
-                fontWeight: "700",
               }}
             >
-              Learn • Play • Win
+              Learn • Test • Improve
             </p>
           </div>
         </div>
 
-        {/* Navigation */}
+        {/* NAVIGATION */}
         <div
           style={{
             display: "flex",
-            gap: "12px",
             alignItems: "center",
-            flexWrap: "wrap",
-            background: "rgba(255,255,255,0.08)",
-            padding: "10px 14px",
-            borderRadius: "18px",
-            boxShadow:
-              "inset 0 1px 0 rgba(255,255,255,0.18), 0 8px 22px rgba(0,0,0,0.18)",
-            border: "1px solid rgba(255,255,255,0.12)",
+            gap: "12px",
+            padding: "10px",
+            borderRadius: "20px",
+            background:
+              "linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03))",
+            border: "1px solid rgba(255,255,255,0.06)",
+            zIndex: 2,
           }}
         >
-          <Link to="/" style={linkStyle}>Home</Link>
-          <Link to="/about" style={linkStyle}>About</Link>
-          <Link to="/leaderboard" style={linkStyle}>Leaderboard</Link>
+          <NavLink to="/" style={navLinkStyle}>Home</NavLink>
+          <NavLink to="/about" style={navLinkStyle}>About</NavLink>
+          <NavLink to="/leaderboard" style={navLinkStyle}>Leaderboard</NavLink>
 
           {isLoggedIn ? (
             <>
-              {/* Username */}
-              <span
-                style={{
-                  background: "linear-gradient(135deg, rgba(255,255,255,0.22), rgba(255,255,255,0.12))",
-                  color: "#ffffff",
-                  padding: "10px 14px",
-                  borderRadius: "12px",
-                  fontWeight: "800",
-                  boxShadow:
-                    "inset 0 1px 0 rgba(255,255,255,0.22), 0 6px 14px rgba(0,0,0,0.16)",
-                  border: "1px solid rgba(255,255,255,0.14)",
-                }}
-              >
+              <div style={{ color: "#ecfeff", fontWeight: "800" }}>
                 Hi, {user?.username}
-              </span>
+              </div>
 
-              {/* Dashboard */}
               <button
                 onClick={() => navigate("/dashboard")}
                 style={{
-                  ...buttonBase,
-                  background: "linear-gradient(135deg, #ffffff, #e0e7ff)",
-                  color: "#2563eb",
-                  boxShadow:
-                    "0 8px 18px rgba(255,255,255,0.2), inset 0 1px 0 #ffffff",
+                  ...actionButton,
+                  background:
+                    "linear-gradient(135deg, #d1fae5, #99f6e4)",
                 }}
               >
                 Dashboard
               </button>
 
-              {/* Logout */}
               <button
                 onClick={handleLogout}
                 style={{
-                  ...buttonBase,
-                  background: "linear-gradient(135deg, #ef4444, #dc2626)",
+                  ...actionButton,
+                  background:
+                    "linear-gradient(135deg, #f97316, #ef4444)",
                   color: "#fff",
-                  boxShadow:
-                    "0 8px 18px rgba(239,68,68,0.28), inset 0 1px 0 rgba(255,255,255,0.18)",
                 }}
               >
                 Logout
@@ -196,20 +226,15 @@ const Header = () => {
             </>
           ) : (
             <>
-              <Link to="/login" style={linkStyle}>Login</Link>
-
+              <NavLink to="/login" style={navLinkStyle}>Login</NavLink>
               <Link
                 to="/signup"
                 style={{
-                  textDecoration: "none",
-                  background: "linear-gradient(135deg, #ffffff, #e0e7ff)",
-                  color: "#2563eb",
-                  padding: "10px 16px",
-                  borderRadius: "12px",
-                  fontSize: "15px",
+                  padding: "11px 18px",
+                  borderRadius: "14px",
                   fontWeight: "800",
-                  boxShadow:
-                    "0 8px 18px rgba(255,255,255,0.2), inset 0 1px 0 #ffffff",
+                  background:
+                    "linear-gradient(135deg, #67e8f9, #34d399)",
                 }}
               >
                 Signup
